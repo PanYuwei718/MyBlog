@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="_fragments :: head(~{::title})">
+    <title>Blog Content</title>
+</head>
+<body>
+
+    <!--导航------------------------------------------->
+    <nav th:replace="_fragments :: menu(1)">
+    </nav>
+
+
+
+    <!--中间内容开始------------------------------------------>
+    <div id="waypoint" class="m-container-small m-padded-large animated fadeIn">
+        <div class="ui container animated bounceInLeft">
+            <!--中间内容头部信息开始-->
+            <div class="ui top attached segment">
+                <div class="ui horizontal link list">
+                    <div class="item">
+                        <img src="images/me.jpg" th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image"/>
+                        <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">Pan</a></div>
+                    </div>
+                    <div class="item">
+                        <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2020-01-01</span>
+                    </div>
+                    <div class="item">
+                        <i class="eye icon"></i><span th:text="${blog.views}">100</span>
+                    </div>
+                </div>
+            </div>
+            <!--中间内容头部信息结束-->
+
+            <!--中间内容图片开始-->
+            <div class="ui attached segment">
+                <img src="../static/images/test1.jpg" th:src="@{${blog.firstPicture}}" alt="" class="ui fluid rounded image">
+            </div>
+            <!--中间内容图片结束-->
+
+            <!--中间内容博客内容开始-->
+            <div class="ui attached padded segment ">
+                <div class="ui right aligned basic segment">
+                    <div class="ui green basic label" th:text="${blog.flag}">Reprint</div>
+                </div>
+
+                <!--博客具体内容-->
+                <h2 class="ui center aligned header" th:text="${blog.title}"></h2>
+                <div id="m-id-content" class="typo typo-selection js-toc-content m-padded-left-right-responsive m-padded-large" th:utext="${blog.content}">
+                </div>
+
+                <br>
+
+            </div>
+            <!--中间内容博客内容结束-->
+
+            <!--中间内容博客其他信息开始-->
+            <div class="ui attached positive message" th:if="${blog.shareStatement}">
+                <div class="ui middle aligned grid">
+                    <div class="eleven wide column">
+                        <ul class="list">
+                            <li>Author：<span th:text="${blog.user.nickname}">Pan</span> <a href="" th:href="@{/about}" target="_blank">(About me)</a> </li>
+                            <li>Published time：<span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd HH:mm')}">2021-5-10</span></li>
+                            <li>Reprint：Free by yourself</li>
+                        </ul>
+                    </div>
+                    <div class="five wide column">
+                        <img src="../static/images/me.jpg" th:src="@{${blog.user.avatar}}" alt="" class="ui right floated rounded bordered image" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <!--中间内容博客其他信息结束-->
+
+        </div>
+    </div>
+    <!--中间内容结束------------------------------------------>
+
+
+    <!-- 右边小工具条开始  ---------------->
+    <div id="toolbar" class="m-padded-all m-fixed m-right-bottom" style="display: none;">
+        <div class="ui vertical icon buttons ">
+            <button type="button" class="ui toc-button teal button">Catalog</button>
+            <div id="toTop-button" class="ui icon button"><i class="chevron up icon"></i>Back to Top</div>
+        </div> 
+    </div>
+    <div class="ui toc-comtainer flowing popup transition hidden" style="width: 300px !important;">
+        <ol class="js-toc">
+            
+        </ol>
+    </div>
+    <div id="qrcode" class="ui wechatRead flowing popup transition hidden" style="width: 130px !important">
+         <img src="./static/images/wechat.png" class="ui rounded image" style="width: 100px" />
+    </div>
+    <!-- 右边小工具条结束  ---------------->
+
+    <!--底部内容-->
+    <footer th:replace="_fragments :: footer">
+    </footer>
+
+
+    <script src="../static/dist/jquery/jquery-3.4.1.min.js" th:src="@{/dist/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="../static/dist/semantic/semantic.min.js" th:src="@{/dist/semantic/semantic.min.js}"></script>
+    <script src="../static/lib/scrollTo/scrollTo.min.js" th:src="@{/lib/scrollTo/scrollTo.min.js}"></script>
+    <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+    <script src="../static/lib/tocbot/tocbot.js" th:src="@{/lib/tocbot/tocbot.js}"></script>
+    <script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
+    <script src="../static/lib/waypoints/waypoints.min.js" th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+
+<script>
+<!--    手机端顶部小组件 -->
+    $('.m-menu.m-toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    /* 初始化文章目录 */
+    tocbot.init({
+      // 指定在哪放置这个文章目录
+      tocSelector: '.js-toc',
+      // 需要指定为哪个里面的内容生成目录
+      contentSelector: '.js-toc-content',
+      // 指定生成的级别
+      headingSelector: 'h1, h2, h3, h4',
+      // For headings inside relative or absolute positioned containers within content.
+      hasInnerContainers: true
+    });
+
+    $('.toc-button').popup({
+       popup : $('.toc-comtainer.popup'),
+        on : 'click',
+        position: 'left center'
+    });
+
+
+    var qrcode = new QRCode("qrcode", {
+        text: "http://jindo.dev.naver.com/collie",
+        width: 100,
+        height: 100,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+
+    $('#toTop-button').click(function() {
+        $(window).scrollTo(0,800);
+    });
+
+    //下滑的时候显示右边栏目，简单点就是不if判断，直接显示
+    var waypoint = new Waypoint({
+      element: document.getElementById('waypoint'),
+      handler: function(direction) {
+        if(direction == 'down') {
+            $('#toolbar').show(400);
+        } else {
+            $('#toolbar').hide(400);
+        }
+      }
+    })
+$('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog")
+</script>
+</body>
+</html>

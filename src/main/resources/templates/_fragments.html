@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--头部开始-->
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <!--移动端更好的适应-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/dist/semantic/semantic.min.css" th:href="@{/dist/semantic/semantic.min.css}">
+    <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
+    <link rel="stylesheet" href="../static/css/my.css" th:href="@{/css/my.css}">
+    <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
+    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
+    <title th:replace="${title}">Information of Blog</title>
+</head>
+<body>
+
+<!--导航开始--------------------------------------------->
+<nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-mini m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">Blog</h2>
+            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="home icon"></i>Home Page</a>
+            <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>Classification</a>
+            <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="clone icon"></i>Overview</a>
+            <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="info icon"></i>About me</a>
+            <div class="right m-item item m-mobile-hide">
+                <form name="search" action="#" th:action="@{/search}" target="_blank" method="post">
+                    <div class="ui icon inverted  input">
+                        <input type="text" name="query" placeholder="Input..." th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="ui m-menu m-toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+<!--导航结束---------------------------------------------->
+
+<!--底部内容开始-->
+<footer th:fragment="footer" class="ui inverted vertical segment m-padded-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">WeChat
+                    <div class="item">
+                        <img src="images/wechat.png" th:src="@{/images/wechat.png}" class="ui rounded image" alt="" style="width: 100px"/>
+                    </div>
+
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced">Lasted Blogs</h4>
+                    <div id="newblog-container">
+                        <div class="ui inverted link list" th:fragment="newblogList">
+                            <a class="item" href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" th:each="blog : ${newblogs}" th:text="${blog.title}">testXXXXXXXXX</a>
+                        </div>
+                    </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced">Contact me</h4>
+                <div class="ui inverted link list">
+                    <a class="item m-text-lined" href="https://www.gmail.com" target="_blank">Email: yuweipan53@gmail.com</a>
+                    <a class="item m-text-lined">QQ: 1441944792</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced">About this Web</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">Maybe it is not a Blog, I will write some
+                    study notes in my major or somethings about ComputerScience. Therefore, it is a diary!</p>
+            </div>
+
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright 2021 Pan Yuwei</p>
+    </div>
+</footer>
+
+</body>
+</html>

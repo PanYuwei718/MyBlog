@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="_fragments :: head(~{::title})">
+    <title>Home Page</title>
+</head>
+<body>
+
+
+    <!--导航开始--------------------------------------------->
+    <nav th:replace="_fragments :: menu(1)">
+    </nav>
+
+    <!--中间内容开始------------------------------------------>
+    <div class="m-container m-padded-large">
+        <div class="ui container">
+            <div class="ui stackable grid">
+
+                <!--中间内容左边开始--------->
+                <div class="eleven wide column">
+
+                    <!--中间内容上面的导航开始 ---->
+                    <div class="ui top attached segment">
+                        <div class="ui middle aligned two column grid">
+                            <div class="column">
+                                <h3 class="ui teal header">博客</h3>
+                            </div>
+                            <div class="right aligned column">
+                                All <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}"> 14 </h2> blogs
+                            </div>
+                        </div>
+                    </div>
+                    <!--中间内容上面的导航结束 ---->
+
+                    <!-- 中间内容中间的具体的博客信息开始 -->
+                    <div class="ui attached teal segment">
+                        <div class="ui padded vertical segment m-padded-big" th:each="blog : ${page.content}">
+                            <div class="ui middle aligned mobile reversed stackable grid">
+                                <div class="eleven wide column">
+                                    <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="m-black" th:text="${blog.title}" target="_blank">JVM内存模型</a></h3>
+                                    <p class="m-text" th:text="|${#strings.abbreviate(blog.content,25)}......|"  >&nbsp;&nbsp;&nbsp;最近学习了一下JVM的内存模型，本来想自己写一篇学习心得，总是觉得自己表达不清，然后就从学习资料里复制一段，写到最后发现，基本都是复制的写到最后发现，基本都是复制的</p>
+                                    <div class="ui stackable grid">
+                                        <div class="eleven wide column">
+                                            <div class="ui mini horizontal link list">
+                                                <div class="item">
+                                                    <img src="images/me.jpg" th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image"/>
+                                                    <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">Pan</a></div>
+                                                </div>
+                                                <div class="item">
+                                                    <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2020-01-01</span>
+                                                </div>
+                                                <div class="item">
+                                                    <i class="eye icon"></i><span th:text="${blog.views}">100</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="right aligned five wide column">
+                                            <a href="#" target="_blank" class="ui teal basic m-padded-all-mini m-text-thin label" th:text="${blog.type.name}">学习笔记</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="five wide column">
+                                    <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                                        <img src="../static/images/test1.jpg" th:src="@{${blog.firstPicture}}" alt="" class="ui rounded m-image-size-square image">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                    </div>
+                    <!-- 中间内容中间的具体的博客信息结束 -->
+
+                    <!-- 中间内容底部的翻页效果开始 --->
+                    <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
+                        <div class="ui middle aligned two column grid">
+                            <div class="column">
+                                <a href="#" class="ui mini teal basic button" th:href="@{/(page=${page.number}-1)}" th:unless="${page.first}">上一页</a>
+                            </div>
+                            <div class="right aligned column">
+                                <a href="#" class="ui mini teal basic button" th:href="@{/(page=${page.number}+1)}" th:unless="${page.last}">下一页</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 中间内容底部的翻页效果结束 --->
+
+                </div>
+                <!--中间内容左边结束--------->
+
+                <!--中间内容右边开始--------->
+                <div class="five wide column">
+
+                    <!-- 中间内容右边分类模块开始 -->
+                    <div class="ui segments">
+                        <div class="ui secondary segment">
+                            <div class="ui two column grid">
+                                <div class="column">
+                                    <i class="idea icon"></i>Classification
+                                </div>
+                                <div class="right aligned column">
+                                    <a href="#" target="_blank" th:href="@{types/-1}">MORE <i class="angle double right icon"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui teal segment">
+                            <div class="ui fluid vertical menu">
+                                <a href="#" class="item" th:href="@{/types/{id}(id=${type.id})}" target="_blank" th:each="type : ${types}">
+                                    <span th:text="${type.name}">学习日志</span>
+                                    <div class="ui teal basic left pointing label" th:text="${#arrays.length(type.blogs)}">13</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 中间内容右边分类模块结束 -->
+
+
+                    <!-- 中间内容右边最新推荐模块开始 -->
+                    <div class="ui segments m-margin-top-large">
+                        <div class="ui secondary segment">
+                                    <i class="bookmark icon"></i>Recommend
+                        </div>
+
+
+                        <div class="ui teal segment" th:each="blog : ${recommendBlogs}">
+                                <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="item m-text-thin" th:text="${blog.title}">java内存模型</a>
+                        </div>
+                    </div>
+                    <!-- 中间内容右边最新推荐模块结束 -->
+
+                    <!-- 中间内容右边二维码模块开始 -->
+                    <h4 class="ui horizontal divider header">Welcome!</h4>
+                    <div class="ui centered card" style="width: 11em">
+                        <img src="images/me.jpg" alt="" class="rounded image" style="width: 11em"/>
+                    </div>
+                    <!-- 中间内容右边二维码模块结束 -->
+
+                </div>
+                <!--中间内容右边结束--------->
+
+            </div>
+        </div>
+    </div>
+    <!--中间内容结束------------------------------------------>
+
+    <!--底部内容开始------------------------------------------->
+    <footer th:replace="_fragments :: footer">
+    </footer>
+
+<script src="https://www.zyglz.com/usr/uploads/yinghua.js"></script>
+<script src="../static/dist/jquery/jquery-3.4.1.min.js" th:src="@{/dist/jquery/jquery-3.4.1.min.js}"></script>
+<script src="../static/dist/semantic/semantic.min.js" th:src="@{/dist/semantic/semantic.min.js}"></script>
+<script>
+    $('.m-menu.m-toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog")
+</script>
+</body>
+</html>

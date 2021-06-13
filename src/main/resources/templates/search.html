@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_fragments :: head(~{::title})">
+  <title>Search</title>
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="_fragments :: menu(1)">
+</nav>
+
+<br><br><br><br><br><br><br>
+<!--中间内容-->
+<div  class="m-container m-padded-tb-big">
+  <div class="ui container">
+    <div class="ui stackable grid">
+      <!--左边博客列表-->
+
+      <div class="eleven wide column">
+
+        <!--header-->
+        <div class="ui top attached segment">
+          <div class="ui middle aligned two column grid">
+            <div class="column">
+              <h3 class="ui teal header">Result</h3>
+            </div>
+            <div class="right aligned column">
+              All <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}"> 14 </h2> blogs
+            </div>
+          </div>
+        </div>
+
+        <!--content-->
+        <div th:each="blog : ${page.content}" class="ui attached segment">
+          <div class="ui padded vertical segment m-padded-tb-large" >
+            <div class="ui mobile reversed stackable grid">
+              <div class="eleven wide column">
+                <h3 class="ui header" ><a th:href="@{/blog/{id}(id=${blog.id})}" th:text="${blog.title}"></a></h3>
+                <p class="m-text" th:text="|${#strings.abbreviate(blog.content,40)}......|"></p>
+                <div class="ui grid">
+                  <div class="eleven wide column">
+                    <div class="ui mini horizontal link list">
+                      <div class="item">
+                        <img src="images/me.jpg" th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image"/>
+                        <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">Pan</a></div>
+                      </div>
+                      <div class="item">
+                        <i class="calendar icon"></i> <span th:text="${#dates.format(blog.creatTime,'yyyy-MM-dd')}"></span>
+                      </div>
+                      <div class="item">
+                        <i class="eye icon"></i> [[${blog.views}]]
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="right aligned five wide column">
+                    <a href="#" target="_blank" class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}">认知升级</a>
+                  </div>
+                </div>
+              </div>
+              <div class="five wide column">
+                <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                  <img src="../static/images/test1.jpg" th:src="@{${blog.firstPicture}}" alt="" class="ui rounded m-image-size-square image">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
+          <div class="ui middle aligned two column grid">
+            <div class="column">
+              <a href="#" class="ui mini teal basic button" th:href="@{/(page=${page.number}-1)}" th:unless="${page.first}">上一页</a>
+            </div>
+            <div class="right aligned column">
+              <a href="#" class="ui mini teal basic button" th:href="@{/(page=${page.number}+1)}" th:unless="${page.last}">下一页</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<br><br><br><br><br><br><br><br>
+<!--底部footer-->
+<footer th:replace="_fragments :: footer">
+</footer>
+
+
+<script src="../static/dist/jquery/jquery-3.4.1.min.js" th:src="@{/dist/jquery/jquery-3.4.1.min.js}"></script>
+<script src="../static/dist/semantic/semantic.min.js" th:src="@{/dist/semantic/semantic.min.js}"></script>
+<script>
+  $('.menu.toggle').click(function () {
+    $('.m-item').toggleClass('m-mobile-hide');
+  });
+  $("#blogsearch").click(function () {
+    $("#querypost").submit();
+  });
+  //解决上一页下一页不带条件的问题
+  $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog")
+</script>
+</body>
+</html>
